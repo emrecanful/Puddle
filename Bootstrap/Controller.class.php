@@ -16,6 +16,8 @@ class Controller extends Model {
         require_once("../Packages/Blade/autoload.php");
         /**
          * Making an instance of Laravel's Blade Engine system.
+         * 
+         * @var Object
          */
         $blade = new Blade("../Views", "../Cache/ViewCache");
 
@@ -28,6 +30,10 @@ class Controller extends Model {
             $csrf = self::formCSRF();
             return "<?php echo '$csrf'; ?>";
         });
+        $blade->compiler()->directive("asset", function($expression) {
+            $asset = self::asset($expression);
+            return "<?php echo '$asset'; ?>";
+        });
 
 
         /* -------------------------------------------------------*/
@@ -38,9 +44,21 @@ class Controller extends Model {
     }
 
 
+
+
+    /**
+     * Theese functions are going to be used inside Blade Engine.
+     */
     public static function formCSRF()
     {
         return '<input type="hidden" name="CSRF" value="'.$_SESSION['CSRF'].'">';
+    }
+
+    public static function asset($route)
+    {
+        $route = str_replace("'", "", $route);
+        $route = str_replace('"', "", $route);
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/$route";
     }
 
 }
