@@ -132,12 +132,13 @@ class Route {
                     }
                 }
             }
+            else
+            {
+                header("HTTP/1.1 401 Unauthorized");
+                exit;
+            }
         }
-        else
-        {
-            header("HTTP/1.1 401 Unauthorized");
-            exit;
-        }
+        
         
     }
 
