@@ -5,8 +5,8 @@ class Database {
 
     private static function connect()
     {
-        $pdo = new PDO("mysql:host=localhost;dbname=novianet_db", "emrecanful", "1321912199haha");
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo = new \PDO("mysql:host=localhost;dbname=noviacloud_db", "emrecanful", "1321912199haha");
+        // $pdo->setAttribute(/*\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION*/);
         
         return $pdo;
     }
@@ -18,8 +18,16 @@ class Database {
 
         if( explode(' ', $query)[0] == 'SELECT' )
         {
-            $data = $statement->fetchAll();
-            return $data;
+            if( $status )
+            {
+                $data = $statement->fetchAll();
+                return $data;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
         else if( explode(' ', $query)[0] == 'INSERT' )
         {
@@ -35,6 +43,17 @@ class Database {
         else if( explode(' ', $query)[0] == 'UPDATE' )
         {
             // Do again.
+        }
+        else if( explode(' ', $query)[0] == 'CREATE' )
+        {
+            if( $status )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         
     }
