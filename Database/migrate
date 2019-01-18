@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+require_once("Migration.class.php");
+use Database\Migration;
+
+$object = new Migration;
+
+echo "\33[031m CAUTION!!! Before continuing do you really want to migrate your database? Migration can delete your data inside tables or can damage data if your configrurations are buggy..\n
+ We do highly recommend to check configurations and backup your database. If you are in production please be sure that you have backup of your Database!\n";
+echo "\33[037m Do you want to continue? [Y/n]: ";
+$handle = fopen ("php://stdin","r");
+$line = fgets($handle);
+if(trim($line) != 'Y'){
+    echo "ABORTING!\n";
+    exit;
+}
+echo "\n";
+echo "Thank you, continuing...\n";
+
+$allFiles = $object->getAllFiles();
+
+$fileNames = "";
+
+foreach( $allFiles as $file )
+{
+    require_once($file);
+    $a = explode("/", $file);
+    $b = explode(".", $a[1]);
+
+    $tObject = new $b[0];
+    echo "\n\033[033m STARTING ENGINE FOR: ".$b[0];
+    $tObject->start();
+
+    $fileNames .= $b[0].",";
+}
+
+echo "\033[036m DONE O_o Exiting with code 0. There might be errors. Please check terminal before exitting.\n";
+
+$object->migrationsMigrate($fileNames);
+?>
