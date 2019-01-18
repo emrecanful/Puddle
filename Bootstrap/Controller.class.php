@@ -30,11 +30,6 @@ class Controller extends Model {
             $csrf = self::formCSRF();
             return "<?php echo '$csrf'; ?>";
         });
-        $blade->compiler()->directive("asset", function($expression) {
-            $asset = self::asset($expression);
-            return "<?php echo '$asset'; ?>";
-        });
-
 
         /* -------------------------------------------------------*/
         /**
