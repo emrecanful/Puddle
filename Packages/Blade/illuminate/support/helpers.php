@@ -1164,3 +1164,5 @@ if (! function_exists('with')) {
         return is_null($callback) ? $value : $callback($value);
     }
 }
+
+require_once("../Packages/Blade/customFunctions.php");
